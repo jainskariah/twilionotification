@@ -1,0 +1,32 @@
+---
+- hosts: webserver
+  gather_facts: true
+  tasks:
+    - name: "Service variable check facts"
+      become: true
+      ignore_errors: yes
+      replace:
+        path: /etc/apache2/apache2.conf
+        regexp: '^Timeout\s300'
+        replace: Timeout 200
+        validate: '/usr/sbin/apache2ctl -f %s -t'
+      register: output
+    - debug:
+        var: output
+    - name: "Get cpu usage"
+      shell: "top -b -n 1 | grep %Cpu | awk '{print $2}'"
+      register: top
+    - name: "Get IP address"
+      shell: hostname -i
+      register: address
+    - debug:
+        var: address.stdout
+      when: top.stdout|float > 10
+    - debug:
+        var: top.stdout
+    - debug:
+        var: address.stdout
+      when: output.changed == true
+    - debug:
+        var: address.stdout
+      when: output.changed == false

@@ -1,0 +1,39 @@
+---
+- hosts: webserver
+  become: true
+  vars:
+    clone_dir: source
+  tasks:
+    - name: "Shell to clear files"
+      shell: rm -rf /tmp/"{{ clone_dir }}"/*
+    - name: "install httpd git"
+      yum: name=git,httpd state=present
+    - name: "create directory"
+      file:
+        path: /tmp/"{{ clone_dir }}"
+        state: directory
+        owner: root
+        group: root
+        mode: 0700
+    - name: "Git copy over"
+      git:
+        repo: https://github.com/JainSkariahThomas/templete.git
+        dest: /tmp/"{{ clone_dir }}"
+      register: git_status
+    - debug: var=git_status
+    - name: "Copy ovethe templetes"
+      when: git_status.changed
+      copy:
+        src: /tmp/"{{ clone_dir }}"/unearth/
+        dest: /var/www/html/
+        remote_src: yes
+        owner: apache
+        group: apache
+    - name: "delecting files from document root"
+      when: git_status.changed
+      file:
+        path: /var/www/html/.git
+        state: absent
+    - name: "restart service"
+      when: git_status.changed
+      service: name=httpd state=restarted enabled=yes
