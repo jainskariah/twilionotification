@@ -7,3 +7,8 @@ This script is setup to send a notification message to Whatsapp Numeber when som
 Ensure to add the code on the .Bashrc file so that the code will get executed.
 
 python2 whatsapp.py
+
+
+#whatsapp_ssh_IP_notification.py
+
+This is most updated code that will only list the SSH login section users IP address.
