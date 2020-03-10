@@ -11,4 +11,11 @@ python2 whatsapp.py
 
 #whatsapp_ssh_IP_notification.py
 
-This is most updated code that will only list the SSH login section users IP address.
+This code that will only list the SSH login section users IP address.
+
+#usinglastcommand.py
+
+This Script will fetch the details of login IP using LAST command in Linux and notify the Client.
+This will be the best choice to use as compared to other two script this will not take much time and execution is much faster.
+
+Script whatsapp.py and whatsapp_ssh_IP_notification.py this by use secure log to fetch details. If the log size is in GB then the time taken to read and send the details is much higher compared to using Last Command function.
